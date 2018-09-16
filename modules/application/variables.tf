@@ -15,3 +15,7 @@ variable "instance_type" {
 variable "vpc_id" {}
 variable "subnet_id" {}
 variable "name" {}
+
+variable "extra_sgs" {
+  default = []
+}

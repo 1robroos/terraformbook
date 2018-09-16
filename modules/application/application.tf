@@ -22,7 +22,7 @@ resource "aws_instance" "app-server" {
   ami                    = "ami-337be65c"
   instance_type          = "${lookup(var.instance_type, var.environment)}"
   subnet_id              = "${var.subnet_id}"
-  vpc_security_group_ids = ["${aws_security_group.allow_http.id}"]
+  vpc_security_group_ids = ["${distinct(concat(var.extra_sgs, aws_security_group.allow_http.*.id))}"]
 
   tags {
     Name = "${var.name}"
@@ -32,6 +32,11 @@ resource "aws_instance" "app-server" {
 output "hostname" {
   value = "${aws_instance.app-server.private_dns}"
 }
-#Terraform provides the lookup() interpolation function. This function accepts map as the first argument, the key to look for in this map as the second argument, and an optional default value as the third argument. 
-#We did not specify the default value inside the lookup() function; there is already a default on both module and root levels.
-#Maps give you more flexibility compared with regular string variables.
+
+#/*Now we only need to use this extra security group ID together with an app-specific security group. 
+#To achieve this, we will use the concat() interpolation function. 
+#This function joins multiple lists into one. We also better ensure that the resulting list doesn't have duplicates. 
+#The distinct() function will help with this; it removes all the duplicates, 
+#keeping only the first occurrence of each non-unique element. 
+#We will join the extra_sgs list with a list made from an app-specific SG */
+
