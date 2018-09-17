@@ -21,6 +21,7 @@ variable "extra_packages" {
 IN de variables.tf van de module in ./modules/variables.tf moet je ook die variabele opnemen: variable "extra_packages" {}
 
 En in de application.tf :
+~~~
 resource "aws_instance" "app-server" {
   user_data              = "${data.template_file.user_data.rendered}"
 
@@ -32,7 +33,7 @@ resource "aws_instance" "app-server" {
       nameserver = "${var.external_nameserver}"
     }
   }
-
+~~~
 Wat omslachtig allemaal.
 
 in user_data.sh.tpl staat;${packages} wat als waarde dan heeft: wget bind-utils
