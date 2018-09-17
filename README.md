@@ -22,3 +22,6 @@ resource "aws_subnet" "public" {
 
 
 Also test with  making use of 'list variable' in cidr_blocks for allow_ssh_access
+
+This is powerfull:
+terraform plan -var 'subnet_cidrs={public = "172.0.16.0/24", private = "172.0.17.0/24"}'
