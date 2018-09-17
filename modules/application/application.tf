@@ -18,8 +18,16 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
+data "aws_ami" "app-ami" {
+  most_recent = true
+
+  #  owners      = ["self"]
+  # ubuntu ami account ID
+  owners = ["099720109477"]
+}
+
 resource "aws_instance" "app-server" {
-  ami                    = "ami-337be65c"
+  ami                    = "${data.aws_ami.app-ami.id}"
   instance_type          = "${lookup(var.instance_type, var.environment)}"
   subnet_id              = "${var.subnet_id}"
   vpc_security_group_ids = ["${distinct(concat(var.extra_sgs, aws_security_group.allow_http.*.id))}"]
@@ -32,11 +40,3 @@ resource "aws_instance" "app-server" {
 output "hostname" {
   value = "${aws_instance.app-server.private_dns}"
 }
-
-#/*Now we only need to use this extra security group ID together with an app-specific security group. 
-#To achieve this, we will use the concat() interpolation function. 
-#This function joins multiple lists into one. We also better ensure that the resulting list doesn't have duplicates. 
-#The distinct() function will help with this; it removes all the duplicates, 
-#keeping only the first occurrence of each non-unique element. 
-#We will join the extra_sgs list with a list made from an app-specific SG */
-

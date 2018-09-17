@@ -2,14 +2,26 @@ provider "aws" {
   region = "${var.region}"
 }
 
+data "aws_vpc" "management_layer" {
+  id = "vpc-069ca85ebb3419451"
+}
+
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
 }
+
+resource "aws_vpc_peering_connection" "my_vpc-management" {
+  peer_vpc_id = "${data.aws_vpc.management_layer.id}"
+  vpc_id      = "${aws_vpc.my_vpc.id}"
+  auto_accept = true
+}
+
 # Looking up in map subnet_cidrs in variables.tf :
 resource "aws_subnet" "public" {
   vpc_id     = "${aws_vpc.my_vpc.id}"
   cidr_block = "${var.subnet_cidrs["public"]}"
 }
+
 # Looking up in map subnet_cidrs in variables.tf :
 resource "aws_subnet" "private" {
   vpc_id     = "${aws_vpc.my_vpc.id}"
@@ -30,6 +42,7 @@ module "mighty_trousers" {
 output "MODULEHOSTNAME" {
   value = "${module.mighty_trousers.hostname}"
 }
+
 # Making use of 'list variable' in cidr_blocks for allow_ssh_access
 resource "aws_security_group" "default" {
   name        = "Default SG"
@@ -41,6 +54,7 @@ resource "aws_security_group" "default" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["${var.allow_ssh_access}"]
+
     #cidr_blocks = ["0.0.0.0/0"]
   }
 }
