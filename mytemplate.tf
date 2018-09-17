@@ -28,15 +28,20 @@ resource "aws_subnet" "private" {
   cidr_block = "${var.subnet_cidrs["private"]}"
 }
 
-module "mighty_trousers" {
-  source      = "./modules/application"
-  vpc_id      = "${aws_vpc.my_vpc.id}"
-  subnet_id   = "${aws_subnet.public.id}"
-  name        = "MightyTrousers"
-  environment = "${var.environment}"
-  extra_sgs   = ["${aws_security_group.default.id}"] #pass xtra SG  to the module, wrapping it with square brackets
+resource "aws_key_pair" "ecskeypair_publickey" {
+  key_name   = "ecskeypair_publickey"
+  public_key = "${file("~/.ssh/ecskeypair_publickey")}"
+}
 
-  #We will use prod on top level to show that root module variable value will override the default of module itself.
+module "mighty_trousers" {
+  source              = "./modules/application"
+  vpc_id              = "${aws_vpc.my_vpc.id}"
+  subnet_id           = "${aws_subnet.public.id}"
+  name                = "MightyTrousers"
+  environment         = "${var.environment}"
+  extra_sgs           = ["${aws_security_group.default.id}"]              #pass xtra SG  to the module, wrapping it with square brackets
+  extra_packages      = "${lookup(var.extra_packages, "MightyTrousers", "base")}"
+  external_nameserver = "${var.external_nameserver}"
 }
 
 output "MODULEHOSTNAME" {

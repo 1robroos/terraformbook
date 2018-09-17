@@ -4,7 +4,7 @@ variable "region" {
 }
 
 variable "environment" {
-  default = "prod"
+  default = "test"
 }
 
 variable "allow_ssh_access" {
@@ -24,5 +24,17 @@ variable "subnet_cidrs" {
   default = {
     public  = "10.0.1.0/24"
     private = "10.0.2.0/24"
+  }
+}
+
+variable "external_nameserver" {
+  default = "8.8.8.8"
+}
+
+variable "extra_packages" {
+  description = "Additional packages to install for particular module"
+
+  default = {
+    MightyTrousers = "wget bind-utils"
   }
 }
