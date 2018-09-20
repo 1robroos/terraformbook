@@ -24,7 +24,7 @@ SG can not be deleted before instance is deleted.
 
 
 #outputs:
-rob@rob-Latitude-5590:~/Documents/github/packt-terraform$ terraform output
+$ terraform output
 
 The state file either has no outputs defined, or all the defined
 outputs are empty. Please define an output in your configuration
@@ -44,7 +44,7 @@ output "hostname" {
   # THis you can use in the template file in your root module.
 }
 
-rob@rob-Latitude-5590:~/Documents/github/packt-terraform$ terraform output
+$ terraform output
 The state file either has no outputs defined, or all the defined
 outputs are empty. Please define an output in your configuration
 with the `output` keyword and run `terraform refresh` for it to
@@ -72,11 +72,11 @@ rob@rob-Latitude-5590:~/Documents/github/packt-terraform$ terraform output
 hostname = ip-10-0-1-70.eu-central-1.compute.internal
 --------------------------------------------------------------------
 Voor iedere instance die met de module is gecreerd kun je de hostname uitlezen:
-rob@rob-Latitude-5590:~/Documents/github/packt-terraform$ terraform output -module=mighty_trousers hostname
+$ terraform output -module=mighty_trousers hostname
 ip-10-0-1-70.eu-central-1.compute.internal
-rob@rob-Latitude-5590:~/Documents/github/packt-terraform$ terraform output -module=ILOVEIT hostname
+$ terraform output -module=ILOVEIT hostname
 ip-10-0-1-135.eu-central-1.compute.internal
-rob@rob-Latitude-5590:~/Documents/github/packt-terraform$ terraform output -module=crazy_foods hostname
+$ terraform output -module=crazy_foods hostname
 ip-10-0-1-4.eu-central-1.compute.internal
 
 En die van mighty_trousers is gebruikt om terug te geven aan de root module en om die te verwerken in een tag van de crazy_foods instance.
