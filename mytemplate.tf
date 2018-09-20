@@ -21,15 +21,24 @@ module "mighty_trousers" {
   subnet_id = "${aws_subnet.public.id}"
   name      = "MightyTrousers"
 }
+
 module "crazy_foods" {
-  source = "./modules/application"
-  vpc_id = "${aws_vpc.my_vpc.id}"
+  source    = "./modules/application"
+  vpc_id    = "${aws_vpc.my_vpc.id}"
   subnet_id = "${aws_subnet.public.id}"
-  name = "CrazyFoods"
+  name      = "CrazyFoods ${module.mighty_trousers.hostname}"
 }
+
 module "ILOVEIT" {
-  source = "./modules/application"
-  vpc_id = "${aws_vpc.my_vpc.id}"
+  source    = "./modules/application"
+  vpc_id    = "${aws_vpc.my_vpc.id}"
   subnet_id = "${aws_subnet.public.id}"
-  name = "ILOVEIT"
+  name      = "ILOVEIT"
 }
+#Get output in root module:
+output "hostname" {
+  value = "${module.mighty_trousers.hostname}"
+
+  # THis you can use in the template file in your root module.
+}
+

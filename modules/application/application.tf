@@ -32,3 +32,9 @@ resource "aws_instance" "mighty-trousers" {
     Name = "${var.name}"
   }
 }
+
+output "hostname" {
+  value = "${aws_instance.mighty-trousers.private_dns}"
+
+  # THis you can use in the template file in your root module.
+}
