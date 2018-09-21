@@ -1,5 +1,8 @@
+# Provider configuration
 provider "aws" {
-  region = "${var.region}"
+  shared_credentials_file = "/home/rob/.aws/credentials"
+  profile                 = "kfsoladmin"
+  region                  = "${var.region}"
 }
 
 resource "aws_vpc" "my_vpc" {
@@ -11,22 +14,20 @@ resource "aws_subnet" "public" {
   cidr_block = "10.0.1.0/24"
 }
 
-module "mighty_trousers" {
+module "APPSERVERmodule" {
   source      = "./modules/application"
   vpc_id      = "${aws_vpc.my_vpc.id}"
   subnet_id   = "${aws_subnet.public.id}"
   name        = "MightyTrousers"
   environment = "${var.environment}"
-  extra_sgs   = ["${aws_security_group.default.id}"] #pass xtra SG  to the module, wrapping it with square brackets 
-
-  #We will use prod on top level to show that root module variable value will override the default of module itself.
+  extra_sgs   = ["${aws_security_group.defaultaccess.id}"] #pass xtra SG  to the module, wrapping it with square brackets 
 }
 
-output "MODULEHOSTNAME" {
-  value = "${module.mighty_trousers.hostname}"
+output "APPSERVERHOSTNAME" {
+  value = "${module.APPSERVERmodule.hostname}"
 }
 
-resource "aws_security_group" "default" {
+resource "aws_security_group" "defaultaccess" {
   name        = "Default SG"
   description = "Allow SSH access"
   vpc_id      = "${aws_vpc.my_vpc.id}"
