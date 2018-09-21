@@ -15,18 +15,18 @@ resource "aws_subnet" "public" {
   cidr_block = "10.0.1.0/24"
 }
 
-module "mighty_trousers" {
+module "MYAPPSERVER" {
   source    = "./modules/application"
   vpc_id    = "${aws_vpc.my_vpc.id}"
   subnet_id = "${aws_subnet.public.id}"
-  name      = "MightyTrousers"
+  name      = "MYAPPSERVER"
 }
 
 module "crazy_foods" {
   source    = "./modules/application"
   vpc_id    = "${aws_vpc.my_vpc.id}"
   subnet_id = "${aws_subnet.public.id}"
-  name      = "CrazyFoods ${module.mighty_trousers.hostname}"
+  name      = "CrazyFoods ${module.MYAPPSERVER.hostname}"
 }
 
 module "ILOVEIT" {
@@ -35,10 +35,8 @@ module "ILOVEIT" {
   subnet_id = "${aws_subnet.public.id}"
   name      = "ILOVEIT"
 }
-#Get output in root module:
+
+#Get output in root module from modules/appliation module:
 output "hostname" {
-  value = "${module.mighty_trousers.hostname}"
-
-  # THis you can use in the template file in your root module.
+  value = "${module.MYAPPSERVER.hostname}"
 }
-

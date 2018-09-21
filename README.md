@@ -80,3 +80,7 @@ $ terraform output -module=crazy_foods hostname
 ip-10-0-1-4.eu-central-1.compute.internal
 
 En die van mighty_trousers is gebruikt om terug te geven aan de root module en om die te verwerken in een tag van de crazy_foods instance.
+--------------------
+branch changenamemighty_trousers
+ik wil af van die naam .
+

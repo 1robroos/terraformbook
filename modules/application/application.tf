@@ -22,7 +22,7 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-resource "aws_instance" "mighty-trousers" {
+resource "aws_instance" "GENERIC-INSTANCE_TEMPLATE" {
   ami                    = "ami-337be65c"
   instance_type          = "t2.micro"
   subnet_id              = "${var.subnet_id}"
@@ -34,7 +34,7 @@ resource "aws_instance" "mighty-trousers" {
 }
 
 output "hostname" {
-  value = "${aws_instance.mighty-trousers.private_dns}"
+  value = "${aws_instance.GENERIC-INSTANCE_TEMPLATE.private_dns}"
 
   # THis you can use in the template file in your root module.
 }
