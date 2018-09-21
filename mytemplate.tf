@@ -1,5 +1,8 @@
+# Provider configuration
 provider "aws" {
   region = "${var.region}"
+  shared_credentials_file = "/home/rob/.aws/credentials"
+  profile                 = "kfsoladmin"
 }
 
 data "aws_vpc" "management_layer" {
@@ -28,11 +31,11 @@ resource "aws_subnet" "private" {
   cidr_block = "${var.subnet_cidrs["private"]}"
 }
 
-module "mighty_trousers" {
+module "APPSERVER" {
   source      = "./modules/application"
   vpc_id      = "${aws_vpc.my_vpc.id}"
   subnet_id   = "${aws_subnet.public.id}"
-  name        = "MightyTrousers"
+  name        = "postgres_cfa"
   environment = "${var.environment}"
   extra_sgs   = ["${aws_security_group.default.id}"] #pass xtra SG  to the module, wrapping it with square brackets
 
@@ -40,7 +43,7 @@ module "mighty_trousers" {
 }
 
 output "MODULEHOSTNAME" {
-  value = "${module.mighty_trousers.hostname}"
+  value = "${module.APPSERVER.hostname}"
 }
 
 # Making use of 'list variable' in cidr_blocks for allow_ssh_access

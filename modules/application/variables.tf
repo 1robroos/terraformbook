@@ -7,9 +7,9 @@ variable "instance_type" {
 
   default = {
     dev     = "t2.micro"
-    test    = "t2.medium"
-    prod    = "t2.large"
-    sandbox = "t3.micro"
+    test    = "t2.micro"
+    prod    = "t2.medium"
+    sandbox = "t2.micro"
   }
 }
 

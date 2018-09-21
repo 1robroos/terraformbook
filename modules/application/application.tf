@@ -26,7 +26,7 @@ data "aws_ami" "app-ami" {
   owners = ["099720109477"]
 }
 
-resource "aws_instance" "app-server" {
+resource "aws_instance" "generic-app-server" {
   ami                    = "${data.aws_ami.app-ami.id}"
   instance_type          = "${lookup(var.instance_type, var.environment)}"
   subnet_id              = "${var.subnet_id}"
@@ -38,5 +38,5 @@ resource "aws_instance" "app-server" {
 }
 
 output "hostname" {
-  value = "${aws_instance.app-server.private_dns}"
+  value = "${aws_instance.generic-app-server.private_dns}"
 }
