@@ -1,17 +1,28 @@
+# Provider configuration
 provider "aws" {
   region = "${var.region}"
+  shared_credentials_file = "/home/rob/.aws/credentials"
+  profile                 = "kfsoladmin"
 }
 
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
 }
+
 # Looking up in map subnet_cidrs in variables.tf :
-resource "aws_subnet" "public" {
-  vpc_id     = "${aws_vpc.my_vpc.id}"
-  cidr_block = "${var.subnet_cidrs["public"]}"
+variable "typenet" {
+  default = "public"
 }
-# Looking up in map subnet_cidrs in variables.tf :
-resource "aws_subnet" "private" {
+
+resource "aws_subnet" public  {
+  vpc_id = "${aws_vpc.my_vpc.id}"
+# Just a stupid test with lookup function where var-typenet is set to public.
+  #cidr_block = "${var.subnet_cidrs["public"]}"
+  cidr_block = "${lookup(var.subnet_cidrs, var.typenet)}"
+}
+
+
+resource "aws_subnet" private {
   vpc_id     = "${aws_vpc.my_vpc.id}"
   cidr_block = "${var.subnet_cidrs["private"]}"
 }
@@ -30,6 +41,7 @@ module "mighty_trousers" {
 output "MODULEHOSTNAME" {
   value = "${module.mighty_trousers.hostname}"
 }
+
 # Making use of 'list variable' in cidr_blocks for allow_ssh_access
 resource "aws_security_group" "default" {
   name        = "Default SG"
@@ -41,6 +53,7 @@ resource "aws_security_group" "default" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["${var.allow_ssh_access}"]
+
     #cidr_blocks = ["0.0.0.0/0"]
   }
 }
